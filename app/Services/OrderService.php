@@ -32,4 +32,11 @@ class OrderService
             ->orderBy('created_at')
             ->get();
     }
+
+    public function cancelOrder(Order $order): void
+    {
+        $order->update([
+            'status' => 'cancelled',
+        ]);
+    }
 }
