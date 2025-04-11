@@ -24,8 +24,8 @@ class StoreOrderRequest extends FormRequest
     {
         return [
             'type' => 'required|in:sell,buy',
-            'quantity' => 'required|decimal:0,3',
-            'price' => 'required|int',
+            'quantity' => 'required|decimal:0,3|min:0.001',
+            'price' => 'required|numeric|min:1',
         ];
     }
 }
