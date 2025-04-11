@@ -39,6 +39,9 @@ class OrderController extends Controller
         if ($user->cannot('cancel', $order)) {
             return response()->json(['message' => 'You do not have access to this order.'], 403);
         }
+        if ($order->status != 'open') {
+            return response()->json(['message' => 'Only orders in open status can be cancelled.'], 422);
+        }
 
         $this->orderService->cancelOrder($order);
 
