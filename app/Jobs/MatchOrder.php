@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Order;
 use App\Services\OrderService;
 use App\Services\TransactionService;
+use App\Services\UserService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\DB;
@@ -23,7 +24,11 @@ class MatchOrder implements ShouldQueue
     /**
      * Execute the job.
      */
-    public function handle(OrderService $orderService, TransactionService $transactionService): void
+    public function handle(
+        OrderService       $orderService,
+        TransactionService $transactionService,
+        UserService        $userService
+    ): void
     {
         $order = $this->order->fresh(); // Ensuring that information is update!
 
@@ -38,7 +43,7 @@ class MatchOrder implements ShouldQueue
 
             $matchableQuantity = min($order->remaining_quantity, $match->remaining_quantity);
 
-            DB::transaction(function () use ($order, $match, $matchableQuantity, $transactionService) {
+            DB::transaction(function () use ($order, $match, $matchableQuantity, $transactionService, $userService) {
                 $order->remaining_quantity -= $matchableQuantity;
                 $match->remaining_quantity -= $matchableQuantity;
 
@@ -48,9 +53,9 @@ class MatchOrder implements ShouldQueue
                 $order->save();
                 $match->save();
 
-                $transactionService->storeTransaction($order, $match, $matchableQuantity);
+                $transaction = $transactionService->storeTransaction($order, $match, $matchableQuantity);
 
-                //TODO: update balance, User Service
+                $userService->updateBalance($transaction);
             });
         }
     }

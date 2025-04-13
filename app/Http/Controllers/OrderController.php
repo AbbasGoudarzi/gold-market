@@ -7,18 +7,26 @@ use App\Jobs\MatchOrder;
 use App\Models\Order;
 use App\Models\User;
 use App\Services\OrderService;
+use App\Services\UserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    public function __construct(public OrderService $orderService)
+    public function __construct(public OrderService $orderService, public UserService $userService)
     {
     }
 
     public function store(StoreOrderRequest $request): JsonResponse
     {
         $user = $request->user();
+        if($request->get('type') == 'sell') {
+            if(!$this->userService->checkGoldBalance($user, $request->get('quantity'))) {
+                return response()->json(['message' => 'Insufficient gold balance to place this sell order.'], 422);
+            }
+        } else {
+            // check money balance!, for type == 'buy'
+        }
         $order = $this->orderService->storeOrder($user, $request->all());
 
         MatchOrder::dispatch($order);
