@@ -14,8 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('sell_order_id');
             $table->foreignId('buy_order_id');
-//            $table->foreignId('seller_id');
-//            $table->foreignId('buyer_id');
+            $table->foreignId('seller_id'); // denormalization
+            $table->foreignId('buyer_id'); // denormalization
             $table->decimal('trade_quantity', 8, 3);
             $table->unsignedBigInteger('price');
             $table->unsignedBigInteger('total_amount'); // price * trade_quantity

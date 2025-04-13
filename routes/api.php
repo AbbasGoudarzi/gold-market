@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\TransactionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +17,8 @@ Route::prefix('auth')->group(function () {
 Route::prefix('orders')->middleware('auth:sanctum')->group(function () {
     Route::post('/', [OrderController::class, 'store']);
     Route::post('/{order}/cancel', [OrderController::class, 'cancel']);
+});
+
+Route::prefix('transactions')->middleware('auth:sanctum')->group(function () {
+    Route::get('/', [TransactionController::class, 'index']);
 });
