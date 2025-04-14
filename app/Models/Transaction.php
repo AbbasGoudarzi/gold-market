@@ -2,9 +2,29 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
+/**
+ * @property int $id
+ * @property int $sell_order_id
+ * @property int $buy_order_id
+ * @property int $seller_id
+ * @property int $buyer_id
+ * @property float $trade_quantity
+ * @property int $price
+ * @property int $total_amount
+ * @property float $commission_percent
+ * @property int $commission_value
+ * @property int $final_amount
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read Order|null $buyOrder
+ * @property-read User|null $buyer
+ * @property-read Order|null $sellOrder
+ * @property-read User|null $seller
+ */
 class Transaction extends Model
 {
     protected $guarded = [];
