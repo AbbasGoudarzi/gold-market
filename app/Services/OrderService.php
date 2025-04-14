@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 
 class OrderService
 {
-    public function storeOrder(User $user, array $data)
+    public function storeOrder(User $user, array $data): Order
     {
         return Order::query()->create([
             'user_id' => $user->id,

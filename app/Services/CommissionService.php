@@ -8,7 +8,7 @@ class CommissionService
     protected float $rate1to10 = 0.015;
     protected float $rateAbove10 = 0.01;
 
-    protected int $minCommission = 500000;
+    protected int $minCommission = 500000; // In rials
     protected int $maxCommission = 50000000;
 
     public function calculate(float $quantity, int $totalAmount): array
