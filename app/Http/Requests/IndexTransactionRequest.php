@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\OrderType;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class IndexTransactionRequest extends FormRequest
 {
@@ -23,7 +25,7 @@ class IndexTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => 'in:sell,buy,all'
+            'type' => [Rule::in(OrderType::values())],
         ];
     }
 }

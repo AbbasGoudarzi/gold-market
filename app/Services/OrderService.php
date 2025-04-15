@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Enums\OrderStatus;
+use App\Enums\OrderType;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
@@ -16,17 +18,17 @@ class OrderService
             'price' => $data['price'],
             'total_quantity' => $data['quantity'],
             'remaining_quantity' => $data['quantity'],
-            'status' => 'open',
+            'status' => OrderStatus::OPEN->value,
         ]);
     }
 
     public function getMatches(Order $order): Collection
     {
-        $oppositeType = $order->type == 'buy' ? 'sell' : 'buy';
+        $oppositeType = $order->type == OrderType::BUY->value ? OrderType::SELL->value : OrderType::BUY->value;
 
         return Order::query()->where('type', $oppositeType)
             ->where('price', $order->price)
-            ->where('status', 'open')
+            ->where('status', OrderStatus::OPEN->value)
             ->where('user_id', '!=', $order->user_id)
             ->orderBy('created_at')
             ->get();
@@ -35,7 +37,7 @@ class OrderService
     public function cancelOrder(Order $order): void
     {
         $order->update([
-            'status' => 'cancelled',
+            'status' => OrderStatus::CANCELED->value,
         ]);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\OrderStatus;
+use App\Enums\OrderType;
 use App\Http\Requests\StoreOrderRequest;
 use App\Http\Resources\OrderResource;
 use App\Jobs\MatchOrder;
@@ -23,7 +25,7 @@ class OrderController extends Controller
         $requestData = $request->all();
         $requestData['price'] = $requestData['price'] * 10; // Toman to rial
 
-        if ($requestData['type'] == 'sell') {
+        if ($requestData['type'] == OrderType::SELL->value) {
             if (!$this->userService->checkGoldBalance($user, $requestData['quantity'])) {
                 return response()->json(['message' => 'Insufficient gold balance to place this sell order.'], 422);
             }
@@ -50,7 +52,7 @@ class OrderController extends Controller
         if ($user->cannot('cancel', $order)) {
             return response()->json(['message' => 'You do not have access to this order.'], 403);
         }
-        if ($order->status != 'open') {
+        if ($order->status != OrderStatus::OPEN->value) {
             return response()->json(['message' => 'Only orders in open status can be cancelled.'], 422);
         }
 

@@ -17,7 +17,7 @@ class TransactionController extends Controller
     public function index(IndexTransactionRequest $request): AnonymousResourceCollection
     {
         $perPage = $request->get('per_page', '10');
-        $type = $request->get('type', 'all');
+        $type = $request->get('type');
         $user = $request->user();
         $transactions = $this->transactionService->getTransactions($user, $type);
         return TransactionResource::collection($transactions->paginate($perPage));

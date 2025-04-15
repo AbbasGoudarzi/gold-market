@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Services\OrderService;
 use App\Services\TransactionService;
@@ -32,7 +33,7 @@ class MatchOrder implements ShouldQueue
     {
         $order = $this->order->fresh(); // Ensuring that information is update!
 
-        if ($order->remaining_quantity == 0 || $order->status !== 'open') {
+        if ($order->remaining_quantity == 0 || $order->status !== OrderStatus::OPEN->value) {
             return;
         }
 
@@ -47,8 +48,8 @@ class MatchOrder implements ShouldQueue
                 $order->remaining_quantity -= $matchableQuantity;
                 $match->remaining_quantity -= $matchableQuantity;
 
-                if ($order->remaining_quantity == 0) $order->status = 'completed';
-                if ($match->remaining_quantity == 0) $match->status = 'completed';
+                if ($order->remaining_quantity == 0) $order->status = OrderStatus::COMPLETED->value;
+                if ($match->remaining_quantity == 0) $match->status = OrderStatus::COMPLETED->value;
 
                 $order->save();
                 $match->save();

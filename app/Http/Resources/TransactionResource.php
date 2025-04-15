@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\OrderType;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Auth;
@@ -17,7 +18,7 @@ class TransactionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'type' => $this->seller_id == Auth::id() ? 'sell' : 'buy',
+            'type' => $this->seller_id == Auth::id() ? OrderType::SELL->value : OrderType::BUY->value,
             'quantity' => $this->trade_quantity,
             'price' => $this->price / 10,
             'total_amount' => $this->total_amount / 10,

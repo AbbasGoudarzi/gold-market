@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\OrderType;
 use App\Models\Order;
 use App\Models\Transaction;
 use App\Models\User;
@@ -20,10 +21,10 @@ class TransactionService
         $finalAmount = $totalAmount + $commission['value'];
 
         return Transaction::query()->create([
-            'sell_order_id' => $order->type == 'sell' ? $order->id : $match->id,
-            'buy_order_id' => $order->type == 'buy' ? $order->id : $match->id,
-            'seller_id' => $order->type == 'sell' ? $order->user_id : $match->user_id,
-            'buyer_id' => $order->type == 'buy' ? $order->user_id : $match->user_id,
+            'sell_order_id' => $order->type == OrderType::SELL->value ? $order->id : $match->id,
+            'buy_order_id' => $order->type == OrderType::BUY->value ? $order->id : $match->id,
+            'seller_id' => $order->type == OrderType::SELL->value ? $order->user_id : $match->user_id,
+            'buyer_id' => $order->type == OrderType::BUY->value ? $order->user_id : $match->user_id,
             'trade_quantity' => $matchableQuantity,
             'price' => $order->price,
             'total_amount' => $totalAmount,
@@ -33,12 +34,12 @@ class TransactionService
         ]);
     }
 
-    public function getTransactions(User $user, string $type = 'all'): Builder
+    public function getTransactions(User $user, string $type = null): Builder
     {
         $transactions = Transaction::query();
-        if ($type == 'sell') {
+        if ($type == OrderType::SELL->value) {
             $transactions->where('seller_id', $user->id);
-        } elseif ($type == 'buy') {
+        } elseif ($type == OrderType::BUY->value) {
             $transactions->where('buyer_id', $user->id);
         } else {
             $transactions->where('seller_id', $user->id)
