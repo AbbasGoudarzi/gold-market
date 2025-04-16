@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Enums\OrderStatus;
 use App\Enums\OrderType;
 use App\Models\Order;
-use App\Services\OrderService;
 use App\Services\TransactionService;
 use App\Services\UserService;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -39,15 +38,16 @@ class ProcessOrderMatching implements ShouldQueue
             })
             ->select('price')
             ->distinct()
-            ->pluck('price');
+            ->pluck('price')->toArray(); // Return in Tomans
 
         // Processing each price group
         foreach ($uniquePrices as $price) {
+            $priceInRial = $price * 10;
             DB::beginTransaction();
             try {
                 // Lock orders at this specific price
                 $buyOrders = Order::query()->where('type', OrderType::BUY->value)
-                    ->where('price', $price)
+                    ->where('price', $priceInRial)
                     ->where(function (builder $query) {
                         $query->where('status', OrderStatus::OPEN->value)
                             ->orWhere('status', OrderStatus::PARTIAL->value);
@@ -58,7 +58,7 @@ class ProcessOrderMatching implements ShouldQueue
                     ->get();
 
                 $sellOrders = Order::query()->where('type', OrderType::SELL->value)
-                    ->where('price', $price)
+                    ->where('price', $priceInRial)
                     ->where(function (builder $query) {
                         $query->where('status', OrderStatus::OPEN->value)
                             ->orWhere('status', OrderStatus::PARTIAL->value);

@@ -21,10 +21,10 @@ class TransactionResource extends JsonResource
             'id' => $this->id,
             'type' => $userIsSeller ? OrderType::SELL->value : OrderType::BUY->value,
             'quantity' => $this->trade_quantity,
-            'price' => $this->price / 10,
-            'total_amount' => $this->total_amount / 10,
-            'fee_value' => $userIsSeller ? $this->seller_fee / 10 : $this->buyer_fee / 10,
-            'final_amount' => $userIsSeller ? $this->seller_final_amount / 10 : $this->buyer_final_amount / 10,
+            'price' => $this->price,
+            'total_amount' => $this->total_amount,
+            'fee_value' => $userIsSeller ? $this->seller_fee : $this->buyer_fee,
+            'final_amount' => $userIsSeller ? $this->seller_final_amount : $this->buyer_final_amount,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }

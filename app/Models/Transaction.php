@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\TomanToRial;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -29,6 +30,15 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Transaction extends Model
 {
     protected $guarded = [];
+
+    protected $casts = [
+        'price' => TomanToRial::class,
+        'total_amount' => TomanToRial::class,
+        'seller_fee' => TomanToRial::class,
+        'buyer_fee' => TomanToRial::class,
+        'seller_final_amount' => TomanToRial::class,
+        'buyer_final_amount' => TomanToRial::class,
+    ];
 
     public function buyOrder(): BelongsTo
     {

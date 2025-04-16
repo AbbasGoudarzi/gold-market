@@ -8,8 +8,8 @@ class FeeService
     protected float $rate1to10 = 1.5;
     protected float $rateAbove10 = 1;
 
-    protected int $minFee = 500000; // In rials
-    protected int $maxFee = 50000000;
+    protected int $minFee = 50000; // In Tomans
+    protected int $maxFee = 5000000;
 
     public function calculateFeePercent(float $quantity): float
     {

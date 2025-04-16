@@ -25,7 +25,6 @@ class OrderController extends Controller
     {
         $user = $request->user();
         $requestData = $request->all();
-        $requestData['price'] = $requestData['price'] * 10; // Toman to rial
 
         if ($requestData['type'] == OrderType::SELL->value) {
             if (!$this->userService->checkGoldBalance($user, $requestData['quantity'])) {
