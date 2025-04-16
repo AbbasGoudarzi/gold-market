@@ -3,10 +3,8 @@
 namespace App\Services;
 
 use App\Enums\OrderStatus;
-use App\Enums\OrderType;
 use App\Models\Order;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Collection;
 
 class OrderService
 {
@@ -20,18 +18,6 @@ class OrderService
             'remaining_quantity' => $data['quantity'],
             'status' => OrderStatus::OPEN->value,
         ]);
-    }
-
-    public function getMatches(Order $order): Collection
-    {
-        $oppositeType = $order->type == OrderType::BUY->value ? OrderType::SELL->value : OrderType::BUY->value;
-
-        return Order::query()->where('type', $oppositeType)
-            ->where('price', $order->price)
-            ->where('status', OrderStatus::OPEN->value)
-            ->where('user_id', '!=', $order->user_id)
-            ->orderBy('created_at')
-            ->get();
     }
 
     public function cancelOrder(Order $order): void

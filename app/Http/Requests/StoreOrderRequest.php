@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\OrderType;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -23,7 +24,7 @@ class StoreOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => 'required|in:sell,buy',
+            'type' => 'required|in:' . OrderType::valuesInString(),
             'quantity' => 'required|decimal:0,3|min:0.001',
             'price' => 'required|numeric|min:1',
         ];

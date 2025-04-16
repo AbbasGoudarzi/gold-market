@@ -25,7 +25,7 @@ class IndexTransactionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => [Rule::in(OrderType::values())],
+            'type' => 'in:' . OrderType::valuesInString(),
         ];
     }
 }

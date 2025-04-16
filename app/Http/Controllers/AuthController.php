@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -20,7 +21,7 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $user = User::query()->where('email', $request->email)->firstOrFail();
+        $user = User::query()->where('email', $request->get('email'))->firstOrFail();
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
@@ -28,5 +29,10 @@ class AuthController extends Controller
             'access_token' => $token,
             'token_type' => 'Bearer'
         ]);
+    }
+
+    public function show(Request $request): UserResource
+    {
+        return new UserResource($request->user());
     }
 }

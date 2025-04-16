@@ -14,19 +14,19 @@ class TransactionService
     {
     }
 
-    public function storeTransaction(Order $order, Order $match, float $matchableQuantity): Transaction
+    public function storeTransaction(Order $buyOrder, Order $sellOrder, float $quantity): Transaction
     {
-        $totalAmount = $matchableQuantity * $order->price;
-        $commission = $this->commissionService->calculate($matchableQuantity, $totalAmount);
+        $totalAmount = $quantity * $buyOrder->price;
+        $commission = $this->commissionService->calculate($quantity, $totalAmount);
         $finalAmount = $totalAmount + $commission['value'];
 
         return Transaction::query()->create([
-            'sell_order_id' => $order->type == OrderType::SELL->value ? $order->id : $match->id,
-            'buy_order_id' => $order->type == OrderType::BUY->value ? $order->id : $match->id,
-            'seller_id' => $order->type == OrderType::SELL->value ? $order->user_id : $match->user_id,
-            'buyer_id' => $order->type == OrderType::BUY->value ? $order->user_id : $match->user_id,
-            'trade_quantity' => $matchableQuantity,
-            'price' => $order->price,
+            'sell_order_id' => $sellOrder->id,
+            'buy_order_id' => $buyOrder->id,
+            'seller_id' => $sellOrder->user_id,
+            'buyer_id' => $buyOrder->user_id,
+            'trade_quantity' => $quantity,
+            'price' => $buyOrder->price,
             'total_amount' => $totalAmount,
             'commission_percent' => $commission['percent'],
             'commission_value' => $commission['value'],
