@@ -19,7 +19,8 @@ return new class extends Migration {
             $table->decimal('total_quantity', 8, 3);
             $table->decimal('remaining_quantity', 8, 3);
             $table->enum('status', OrderStatus::values())->default(OrderStatus::OPEN->value);
-            $table->unsignedBigInteger('price');
+            $table->decimal('price', 20, 0);
+            $table->decimal('fee_percent', 4);
             $table->timestamps();
         });
     }

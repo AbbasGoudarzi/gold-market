@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float $remaining_quantity
  * @property string $status
  * @property int $price
+ * @property float $fee_percent
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read User $user

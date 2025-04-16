@@ -10,15 +10,17 @@ use Illuminate\Database\Eloquent\Builder;
 
 class TransactionService
 {
-    public function __construct(public CommissionService $commissionService)
+    public function __construct(public FeeService $feeService)
     {
     }
 
     public function storeTransaction(Order $buyOrder, Order $sellOrder, float $quantity): Transaction
     {
-        $totalAmount = $quantity * $buyOrder->price;
-        $commission = $this->commissionService->calculate($quantity, $totalAmount);
-        $finalAmount = $totalAmount + $commission['value'];
+        $totalAmount = $quantity * $buyOrder->price; // or sellOrder->price
+        $sellerFee = $this->feeService->calculateFeeValue($sellOrder->fee_percent, $totalAmount);
+        $buyerFee = $this->feeService->calculateFeeValue($buyOrder->fee_percent, $totalAmount);
+        $sellerFinalAmount = $totalAmount + $sellerFee;
+        $buyerFinalAmount = $totalAmount + $buyerFee;
 
         return Transaction::query()->create([
             'sell_order_id' => $sellOrder->id,
@@ -28,9 +30,10 @@ class TransactionService
             'trade_quantity' => $quantity,
             'price' => $buyOrder->price,
             'total_amount' => $totalAmount,
-            'commission_percent' => $commission['percent'],
-            'commission_value' => $commission['value'],
-            'final_amount' => $finalAmount,
+            'seller_fee' => $sellerFee,
+            'buyer_fee' => $buyerFee,
+            'seller_final_amount' => $sellerFinalAmount,
+            'buyer_final_amount' => $buyerFinalAmount,
         ]);
     }
 

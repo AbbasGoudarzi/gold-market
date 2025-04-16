@@ -60,8 +60,8 @@ class ProcessOrderMatching implements ShouldQueue
                 $sellOrders = Order::query()->where('type', OrderType::SELL->value)
                     ->where('price', $price)
                     ->where(function (builder $query) {
-                        $query->where('status', 'OPEN')
-                            ->orWhere('status', 'PARTIAL');
+                        $query->where('status', OrderStatus::OPEN->value)
+                            ->orWhere('status', OrderStatus::PARTIAL->value);
                     })
                     ->where('remaining_quantity', '>', 0)
                     ->orderBy('created_at')

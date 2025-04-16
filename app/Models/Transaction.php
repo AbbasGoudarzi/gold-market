@@ -15,9 +15,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property float $trade_quantity
  * @property int $price
  * @property int $total_amount
- * @property float $commission_percent
- * @property int $commission_value
- * @property int $final_amount
+ * @property int $seller_fee
+ * @property int $buyer_fee
+ * @property int $seller_final_amount
+ * @property int $buyer_final_amount
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @property-read Order|null $buyOrder

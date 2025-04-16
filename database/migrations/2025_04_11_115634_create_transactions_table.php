@@ -17,11 +17,12 @@ return new class extends Migration {
             $table->foreignId('seller_id'); // denormalization
             $table->foreignId('buyer_id'); // denormalization
             $table->decimal('trade_quantity', 8, 3);
-            $table->unsignedBigInteger('price');
-            $table->unsignedBigInteger('total_amount'); // price * trade_quantity
-            $table->decimal('commission_percent', 4);
-            $table->unsignedBigInteger('commission_value');
-            $table->unsignedBigInteger('final_amount'); // total_amount + commission_value
+            $table->decimal('price', 20, 0);
+            $table->decimal('total_amount', 20, 0); // price * trade_quantity
+            $table->decimal('seller_fee', 20, 0);
+            $table->decimal('buyer_fee', 20, 0);
+            $table->decimal('seller_final_amount', 20, 0); // total_amount + fee
+            $table->decimal('buyer_final_amount', 20, 0); // total_amount + fee
             $table->timestamps();
         });
     }

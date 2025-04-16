@@ -22,6 +22,7 @@ class OrderResource extends JsonResource
             'remaining_quantity' => $this->remaining_quantity,
             'status' => $this->status,
             'price' => $this->price / 10,
+            'fee_percent' => $this->fee_percent,
             'created_at' => $this->created_at->format('Y-m-d H:i:s'),
             'user' => new UserResource($this->whenLoaded('user')),
         ];
