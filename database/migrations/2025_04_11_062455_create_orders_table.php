@@ -19,9 +19,11 @@ return new class extends Migration {
             $table->decimal('total_quantity', 8, 3);
             $table->decimal('remaining_quantity', 8, 3);
             $table->enum('status', OrderStatus::values())->default(OrderStatus::OPEN->value);
-            $table->decimal('price', 20, 0);
+            $table->decimal('price', 20, 0); // price_per_gram
             $table->decimal('fee_percent', 4);
             $table->timestamps();
+
+            $table->index(['status', 'type', 'price']); // Use for matching
         });
     }
 
