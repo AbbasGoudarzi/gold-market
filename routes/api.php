@@ -11,6 +11,7 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::prefix('orders')->middleware('auth:sanctum')->group(function () {
+    Route::get('/', [OrderController::class, 'index']);
     Route::post('/', [OrderController::class, 'store']);
     Route::post('/{order}/cancel', [OrderController::class, 'cancel']);
 });

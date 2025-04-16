@@ -13,4 +13,9 @@ enum OrderStatus: string
     {
         return array_column(self::cases(), 'value');
     }
+
+    public static function valuesInString(): string
+    {
+        return implode(',', self::values());
+    }
 }

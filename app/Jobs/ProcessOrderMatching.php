@@ -32,7 +32,7 @@ class ProcessOrderMatching implements ShouldQueue
     {
         // Receive unique price lists from open orders
         $uniquePrices = Order::query()
-            ->where(function (builder $query) {
+            ->where(function (Builder $query) {
                 $query->where('status', OrderStatus::OPEN->value)
                     ->orWhere('status', OrderStatus::PARTIAL->value);
             })
@@ -48,7 +48,7 @@ class ProcessOrderMatching implements ShouldQueue
                 // Lock orders at this specific price
                 $buyOrders = Order::query()->where('type', OrderType::BUY->value)
                     ->where('price', $priceInRial)
-                    ->where(function (builder $query) {
+                    ->where(function (Builder $query) {
                         $query->where('status', OrderStatus::OPEN->value)
                             ->orWhere('status', OrderStatus::PARTIAL->value);
                     })
@@ -59,7 +59,7 @@ class ProcessOrderMatching implements ShouldQueue
 
                 $sellOrders = Order::query()->where('type', OrderType::SELL->value)
                     ->where('price', $priceInRial)
-                    ->where(function (builder $query) {
+                    ->where(function (Builder $query) {
                         $query->where('status', OrderStatus::OPEN->value)
                             ->orWhere('status', OrderStatus::PARTIAL->value);
                     })

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Enums\OrderStatus;
 use App\Models\Order;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 
 class OrderService
 {
@@ -31,5 +32,14 @@ class OrderService
         $order->update([
             'status' => OrderStatus::CANCELED->value,
         ]);
+    }
+
+    public function getOrders(User $user, array $statuses, string $type = null)
+    {
+        return $user->orders()
+            ->whereIn('status', $statuses)
+            ->when(!is_null($type), function (Builder $q) use ($type) {
+                $q->where('type', $type);
+            });
     }
 }
